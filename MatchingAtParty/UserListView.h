@@ -24,5 +24,5 @@
 - (UIButton*)plusMaleUserButton;
 - (UIButton*)plusFemaleUserButton;
 
-- (UITextField*)layoutUserView:(int)gender totalUserNum:(int)userId;
+- (UITextField*)layoutUserView:(int)gender totalUserNum:(int)userId columnNum:(int)columnNum;
 @end

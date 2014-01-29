@@ -45,7 +45,6 @@
 
 - (void)tappedCameraButton {
     
-    // カメラ起動
 	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         
 		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];

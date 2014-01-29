@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserListView.h"
 
-@interface UserListViewController : UIViewController<UITextFieldDelegate> {
+@interface UserListViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
     int maleUserNum;
     int femaleUserNum;
 }
+
+@property (nonatomic, retain) UserListView *userListView;
 
 @end

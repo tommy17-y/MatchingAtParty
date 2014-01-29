@@ -54,11 +54,14 @@ const int buttonRate = 10;
     UIImageView *userIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noIconUser.png"]];
     userIcon.layer.cornerRadius = 10.0f;
     userIcon.clipsToBounds = YES;
+    userIcon.userInteractionEnabled = YES;
     return userIcon;
 }
 
 - (UIImageView*)userGenderIcon {
     UIImageView *userGenderIcon = [[UIImageView alloc] init];
+    userGenderIcon.layer.cornerRadius = 5.0f;
+    userGenderIcon.clipsToBounds = YES;
     return userGenderIcon;
 }
 
@@ -68,33 +71,33 @@ const int buttonRate = 10;
     return userName;
 }
 
-- (UITextField*)layoutUserView:(int)gender totalUserNum:(int)userId {
+- (UITextField*)layoutUserView:(int)gender totalUserNum:(int)userId columnNum:(int)columnNum {
     UIView *userView = [self userView];
     userView.tag = userId;
     if(gender == 0) {
         userView.frame = CGRectMake(0,
-                                     (height - userView.frame.size.height) / 2,
-                                     userView.frame.size.width,
-                                     userView.frame.size.height);
+                                    (height - userView.frame.size.height) / 2,
+                                    userView.frame.size.width,
+                                    userView.frame.size.height);
     }else if(gender == 1) {
         userView.frame = CGRectMake(width / 2,
-                                     (height - userView.frame.size.height) / 2,
-                                     userView.frame.size.width,
-                                     userView.frame.size.height);
+                                    (height - userView.frame.size.height) / 2,
+                                    userView.frame.size.width,
+                                    userView.frame.size.height);
     }
     
     UIImageView *userIcon = [self userIcon];
     userIcon.frame = CGRectMake(0,
-                                 0,
-                                 userView.frame.size.height / 5 * 4,
-                                 userView.frame.size.height / 5 * 4);
+                                0,
+                                userView.frame.size.height / 5 * 4,
+                                userView.frame.size.height / 5 * 4);
     [userView addSubview:userIcon];
     
     UIImageView *userGenderIcon = [self userGenderIcon];
     userGenderIcon.frame = CGRectMake(userIcon.frame.origin.x,
-                                       userIcon.frame.origin.y + userIcon.frame.size.height,
-                                       userView.frame.size.height - userIcon.frame.size.height,
-                                       userView.frame.size.height - userIcon.frame.size.height);
+                                      userIcon.frame.origin.y + userIcon.frame.size.height,
+                                      userView.frame.size.height - userIcon.frame.size.height,
+                                      userView.frame.size.height - userIcon.frame.size.height);
     if(gender == 0) {
         userGenderIcon.image = [UIImage imageNamed:@"male.png"];
     }else if(gender == 1) {
@@ -104,9 +107,9 @@ const int buttonRate = 10;
     
     UITextField *userName = [self userName];
     userName.frame = CGRectMake(userGenderIcon.frame.origin.x + userGenderIcon.frame.size.width,
-                                 userGenderIcon.frame.origin.y,
-                                 userView.frame.size.width - userGenderIcon.frame.size.height,
-                                 userGenderIcon.frame.size.height);
+                                userGenderIcon.frame.origin.y,
+                                userView.frame.size.width - userGenderIcon.frame.size.height,
+                                userGenderIcon.frame.size.height);
     [userView addSubview:userName];
     
     [self addSubview:userView];
