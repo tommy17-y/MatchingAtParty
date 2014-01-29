@@ -114,8 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				B6A75C2618958183002B5C20 /* Model */,
-				B6A75C251895816C002B5C20 /* Controller */,
 				B6A75C241895815D002B5C20 /* View */,
+				B6A75C251895816C002B5C20 /* Controller */,
 				B6A75C0418957CF1002B5C20 /* Images.xcassets */,
 				B6A75BF318957CF1002B5C20 /* Supporting Files */,
 			);
@@ -481,6 +481,7 @@
 				B6A75C1D18957CF1002B5C20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B6A75C1E18957CF1002B5C20 /* Build configuration list for PBXNativeTarget "MatchingAtPartyTests" */ = {
 			isa = XCConfigurationList;
@@ -489,6 +490,7 @@
 				B6A75C2018957CF1002B5C20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -9,6 +9,40 @@
 #import "MatchingAtPartyView.h"
 
 @implementation MatchingAtPartyView
+@synthesize startButton = _startButton;
+@synthesize cameraButton = _cameraButton;
+
+- (UIButton*)startButton {
+    if(!_startButton) {
+        CGRect rect;
+        rect = [[UIScreen mainScreen] bounds];
+        _startButton = [[UIButton alloc] initWithFrame:CGRectMake(rect.size.width / 3,
+                                                                  rect.size.height / 3 - 20,
+                                                                  rect.size.width / 3,
+                                                                  rect.size.height / 10)];
+        [_startButton setTitle:@"start" forState:UIControlStateNormal];
+        [_startButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_startButton setBackgroundColor:[UIColor grayColor]];
+        [self addSubview:_startButton];
+    }
+    return  _startButton;
+}
+
+- (UIButton*)cameraButton {
+    if(!_cameraButton) {
+        CGRect rect;
+        rect = [[UIScreen mainScreen] bounds];
+        _cameraButton = [[UIButton alloc] initWithFrame:CGRectMake(rect.size.width / 3,
+                                                                  rect.size.height / 3 + 50,
+                                                                  rect.size.width / 3,
+                                                                  rect.size.height / 10)];
+        [_cameraButton setTitle:@"camera" forState:UIControlStateNormal];
+        [_cameraButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_cameraButton setBackgroundColor:[UIColor grayColor]];
+        [self addSubview:_cameraButton];
+    }
+    return  _cameraButton;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {

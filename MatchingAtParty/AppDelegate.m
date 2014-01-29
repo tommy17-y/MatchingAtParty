@@ -16,7 +16,6 @@
     
     MatchingAtPartyViewController *matchingAtPartyViewController = [[MatchingAtPartyViewController alloc]init];
     
-    
     CGRect rect;
     rect = [[UIScreen mainScreen] bounds];
     _window = [[UIWindow alloc]initWithFrame:rect];

@@ -10,4 +10,10 @@
 
 @interface MatchingAtPartyView : UIView
 
+@property (nonatomic, retain) UIButton *startButton;
+@property (nonatomic, retain) UIButton *cameraButton;
+
+- (UIButton*)startButton;
+- (UIButton*)cameraButton;
+
 @end

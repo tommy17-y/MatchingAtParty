@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MatchingAtPartyViewController : UIViewController
+@interface MatchingAtPartyViewController : UIViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @end
