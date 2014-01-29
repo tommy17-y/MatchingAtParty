@@ -8,6 +8,7 @@
 
 #import "MatchingAtPartyViewController.h"
 #import "MatchingAtPartyView.h"
+#import "UserListViewController.h"
 
 @interface MatchingAtPartyViewController ()
 
@@ -22,26 +23,24 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    MatchingAtPartyView *view = [[MatchingAtPartyView alloc] init];
+    MatchingAtPartyView *matchingAtPartyView = [[MatchingAtPartyView alloc] init];
     
-    [view startButton];
-    [view.startButton addTarget:self action:@selector(tappedStartButton) forControlEvents:UIControlEventTouchUpInside];
+    [matchingAtPartyView startButton];
+    [matchingAtPartyView.startButton addTarget:self action:@selector(tappedStartButton) forControlEvents:UIControlEventTouchUpInside];
+    matchingAtPartyView.startButton.exclusiveTouch = YES;
 
-    [view cameraButton];
-    [view.cameraButton addTarget:self action:@selector(tappedCameraButton) forControlEvents:UIControlEventTouchUpInside];
+    [matchingAtPartyView cameraButton];
+    [matchingAtPartyView.cameraButton addTarget:self action:@selector(tappedCameraButton) forControlEvents:UIControlEventTouchUpInside];
+    matchingAtPartyView.cameraButton.exclusiveTouch = YES;
 
-    [self.view addSubview:view.startButton];
-    [self.view addSubview:view.cameraButton];
+    [self.view addSubview:matchingAtPartyView.startButton];
+    [self.view addSubview:matchingAtPartyView.cameraButton];
     
 }
 
 - (void)tappedStartButton {
-//    // 次画面を指定して遷移
-//    UIViewController *next = [[SubViewController alloc] init];
-//    next.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-//    [self presentViewController:next animated:YES completion:^ {
-//        // 完了時の処理をここに書きます
-//    }];
+    UserListViewController *userListViewController = [[UserListViewController alloc] init];
+    [self presentViewController:userListViewController animated:YES completion:nil];
 }
 
 - (void)tappedCameraButton {
