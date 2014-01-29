@@ -76,12 +76,12 @@ const int buttonRate = 10;
     userView.tag = userId;
     if(gender == 0) {
         userView.frame = CGRectMake(0,
-                                    (height - userView.frame.size.height) / 2,
+                                    userView.frame.size.height * (columnNum - 1) + _plusMaleUserButton.frame.origin.y + _plusMaleUserButton.frame.size.height,
                                     userView.frame.size.width,
                                     userView.frame.size.height);
     }else if(gender == 1) {
         userView.frame = CGRectMake(width / 2,
-                                    (height - userView.frame.size.height) / 2,
+                                    userView.frame.size.height * (columnNum - 1) + _plusFemaleUserButton.frame.origin.y + _plusFemaleUserButton.frame.size.height,
                                     userView.frame.size.width,
                                     userView.frame.size.height);
     }

@@ -111,16 +111,23 @@
 
 - (void)tappedPlusMaleUserButton {
     maleUserNum++;
-//    UITextField *tf = [_userListView layoutUserView:0 totalUserNum:maleUserNum + femaleUserNum columnNum:maleUserNum];
-//    tf.delegate = self;
-//    [self.view addSubview:(UIView*)[_userListView viewWithTag:maleUserNum + femaleUserNum]];
+    [_userListView layoutUserView:0 totalUserNum:maleUserNum + femaleUserNum columnNum:maleUserNum];
+    UIView *view = (UIView*)[_userListView viewWithTag:maleUserNum + femaleUserNum];
+    UITextField *tf = (UITextField*)[view.subviews objectAtIndex:2];
+    UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
+    tf.delegate = self;
+    [iv addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTappedUserIcon:)]];[self.view addSubview:(UIView*)[_userListView viewWithTag:maleUserNum + femaleUserNum]];
 }
 
 - (void)tappedPlusFemaleUserButton {
     femaleUserNum++;
-//    UITextField *tf = [_userListView layoutUserView:1 totalUserNum:maleUserNum + femaleUserNum columnNum:femaleUserNum];
-//    tf.delegate = self;
-//    [self.view addSubview:(UIView*)[_userListView viewWithTag:maleUserNum + femaleUserNum]];
+    [_userListView layoutUserView:1 totalUserNum:maleUserNum + femaleUserNum columnNum:femaleUserNum];
+    UIView *view = (UIView*)[_userListView viewWithTag:maleUserNum + femaleUserNum];
+    UITextField *tf = (UITextField*)[view.subviews objectAtIndex:2];
+    UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
+    tf.delegate = self;
+    [iv addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTappedUserIcon:)]];
+    [self.view addSubview:(UIView*)[_userListView viewWithTag:maleUserNum + femaleUserNum]];
 }
 
 - (void)didReceiveMemoryWarning
