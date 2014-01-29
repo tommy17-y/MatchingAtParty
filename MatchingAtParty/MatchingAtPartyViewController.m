@@ -32,6 +32,7 @@
 
     [self.view addSubview:view.startButton];
     [self.view addSubview:view.cameraButton];
+    
 }
 
 - (void)tappedStartButton {
@@ -48,15 +49,67 @@
     // カメラ起動
 	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         
-		UIImagePickerController *imagePickerController = [[UIImagePickerController alloc]init];
-		[imagePickerController setSourceType:UIImagePickerControllerSourceTypeCamera];
-		[imagePickerController setAllowsEditing:YES];
-		[imagePickerController setDelegate:self];
-		[self presentViewController:imagePickerController animated:YES completion:nil];
+		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        imagePicker.delegate = self;
+        imagePicker.allowsEditing = YES;
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:imagePicker animated:YES completion:nil];
         
     } else {
-		NSLog(@"camera invalid.");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"カメラを起動できません" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
 	}
+
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+
+	UIImage *originalImage = (UIImage *)[info objectForKey:UIImagePickerControllerOriginalImage];
+
+	UIImage *editedImage = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
+	UIImage *saveImage;
+	
+	if(editedImage) {
+		saveImage = editedImage;
+	} else {
+		saveImage = originalImage;
+	}
+	
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	imageView.image = saveImage;
+	
+
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    UIImageWriteToSavedPhotosAlbum(originalImage, self,
+                                   @selector(savedOriginalImage:didFinishSavingWithError:contextInfo:),
+                                   NULL);
+    UIImageWriteToSavedPhotosAlbum(saveImage, self,
+                                   @selector(savedEditedImage:didFinishSavingWithError:contextInfo:),
+                                   NULL);
+}
+
+-(void)savedOriginalImage:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void*)context{
+    
+    if(error){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"撮影画像の保存に失敗しました" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+}
+
+-(void)savedEditedImage:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void*)context{
+    
+    if(error){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"編集画像の保存に失敗しました" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
