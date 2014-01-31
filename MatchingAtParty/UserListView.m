@@ -15,7 +15,7 @@ const int buttonRate = 10;
 - (UIButton*)plusMaleUserButton {
     if(!_plusMaleUserButton) {
         _plusMaleUserButton = [[UIButton alloc] initWithFrame:CGRectMake((width - (width / buttonRate * 2)) / 4,
-                                                                         30,
+                                                                         [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + 10,
                                                                          width / buttonRate,
                                                                          width / buttonRate)];
         UIImage *img = [UIImage imageNamed:@"plusMaleUser.png"];
@@ -30,7 +30,7 @@ const int buttonRate = 10;
 - (UIButton*)plusFemaleUserButton {
     if(!_plusFemaleUserButton) {
         _plusFemaleUserButton = [[UIButton alloc] initWithFrame:CGRectMake((width - (width / buttonRate * 2)) / 4 * 3 + width / buttonRate,
-                                                                           30,
+                                                                           [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + 10,
                                                                            width / buttonRate,
                                                                            width / buttonRate)];
         UIImage *img = [UIImage imageNamed:@"plusFemaleUser.png"];
@@ -71,17 +71,24 @@ const int buttonRate = 10;
     return userName;
 }
 
-- (UITextField*)layoutUserView:(int)gender totalUserNum:(int)userId columnNum:(int)columnNum {
+- (UIButton*)deleteUserButton {
+    UIButton *deleteUserButton = [[UIButton alloc] init];
+    UIImage *img = [UIImage imageNamed:@"deleteUser.png"];
+    [deleteUserButton setBackgroundImage:img forState:UIControlStateNormal];
+    return deleteUserButton;
+}
+
+- (void)layoutUserView:(int)gender UserId:(int)userId columnNum:(int)columnNum {
     UIView *userView = [self userView];
     userView.tag = userId;
     if(gender == 0) {
         userView.frame = CGRectMake(0,
-                                    userView.frame.size.height * (columnNum - 1) + _plusMaleUserButton.frame.origin.y + _plusMaleUserButton.frame.size.height,
+                                    userView.frame.size.height * (columnNum - 1),
                                     userView.frame.size.width,
                                     userView.frame.size.height);
     }else if(gender == 1) {
         userView.frame = CGRectMake(width / 2,
-                                    userView.frame.size.height * (columnNum - 1) + _plusFemaleUserButton.frame.origin.y + _plusFemaleUserButton.frame.size.height,
+                                    userView.frame.size.height * (columnNum - 1),
                                     userView.frame.size.width,
                                     userView.frame.size.height);
     }
@@ -112,9 +119,14 @@ const int buttonRate = 10;
                                 userGenderIcon.frame.size.height);
     [userView addSubview:userName];
     
-    [self addSubview:userView];
+    UIButton *deleteUserButton = [self deleteUserButton];
+    deleteUserButton.frame = CGRectMake(userView.frame.size.width - userIcon.frame.size.height / 4 - 10,
+                                        userIcon.frame.origin.y,
+                                        userIcon.frame.size.height / 4,
+                                        userIcon.frame.size.height / 4);
+    [userView addSubview:deleteUserButton];
     
-    return userName;
+    [self addSubview:userView];
 }
 
 - (id)initWithFrame:(CGRect)frame

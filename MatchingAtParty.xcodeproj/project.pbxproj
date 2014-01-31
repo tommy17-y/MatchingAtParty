@@ -14,6 +14,7 @@
 		B6020F0618994D4D008127AB /* noIconUser.png in Resources */ = {isa = PBXBuildFile; fileRef = B6020F0518994D4D008127AB /* noIconUser.png */; };
 		B6020F0918994FD5008127AB /* female.png in Resources */ = {isa = PBXBuildFile; fileRef = B6020F0718994FD5008127AB /* female.png */; };
 		B6020F0A18994FD5008127AB /* male.png in Resources */ = {isa = PBXBuildFile; fileRef = B6020F0818994FD5008127AB /* male.png */; };
+		B6020F0C18998D34008127AB /* deleteUser.png in Resources */ = {isa = PBXBuildFile; fileRef = B6020F0B18998D34008127AB /* deleteUser.png */; };
 		B6A75BED18957CF1002B5C20 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A75BEC18957CF0002B5C20 /* Foundation.framework */; };
 		B6A75BEF18957CF1002B5C20 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A75BEE18957CF1002B5C20 /* CoreGraphics.framework */; };
 		B6A75BF118957CF1002B5C20 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A75BF018957CF1002B5C20 /* UIKit.framework */; };
@@ -50,6 +51,7 @@
 		B6020F0518994D4D008127AB /* noIconUser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noIconUser.png; sourceTree = "<group>"; };
 		B6020F0718994FD5008127AB /* female.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = female.png; sourceTree = "<group>"; };
 		B6020F0818994FD5008127AB /* male.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = male.png; sourceTree = "<group>"; };
+		B6020F0B18998D34008127AB /* deleteUser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deleteUser.png; sourceTree = "<group>"; };
 		B6A75BE918957CF0002B5C20 /* MatchingAtParty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MatchingAtParty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A75BEC18957CF0002B5C20 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B6A75BEE18957CF1002B5C20 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -99,6 +101,7 @@
 		B6020F001899455E008127AB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B6020F0B18998D34008127AB /* deleteUser.png */,
 				B6020F0718994FD5008127AB /* female.png */,
 				B6020F0818994FD5008127AB /* male.png */,
 				B6020F0118994570008127AB /* plusFemaleUser.png */,
@@ -290,6 +293,7 @@
 				B6020F0618994D4D008127AB /* noIconUser.png in Resources */,
 				B6A75C0518957CF1002B5C20 /* Images.xcassets in Resources */,
 				B6020F0418994570008127AB /* plusMaleUser.png in Resources */,
+				B6020F0C18998D34008127AB /* deleteUser.png in Resources */,
 				B6A75BF718957CF1002B5C20 /* InfoPlist.strings in Resources */,
 				B6020F0A18994FD5008127AB /* male.png in Resources */,
 				B6020F0318994570008127AB /* plusFemaleUser.png in Resources */,

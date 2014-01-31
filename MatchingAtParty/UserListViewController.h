@@ -12,8 +12,10 @@
 @interface UserListViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
     int maleUserNum;
     int femaleUserNum;
+    int userID;
 }
 
 @property (nonatomic, retain) UserListView *userListView;
+@property (nonatomic, retain) UIScrollView *scrollView;
 
 @end

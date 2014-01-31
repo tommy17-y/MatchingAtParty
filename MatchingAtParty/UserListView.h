@@ -16,13 +16,8 @@
 @property (nonatomic,retain) UIButton *plusMaleUserButton;
 @property (nonatomic,retain) UIButton *plusFemaleUserButton;
 
-//@property (nonatomic,retain) UIView *userView;
-//@property (nonatomic, retain) UIImageView *userIcon;
-//@property (nonatomic, retain) UIImageView *userGenderIcon;
-//@property (nonatomic, retain) UITextField *userName;
-
 - (UIButton*)plusMaleUserButton;
 - (UIButton*)plusFemaleUserButton;
 
-- (UITextField*)layoutUserView:(int)gender totalUserNum:(int)userId columnNum:(int)columnNum;
+- (void)layoutUserView:(int)gender UserId:(int)userId columnNum:(int)columnNum;
 @end
