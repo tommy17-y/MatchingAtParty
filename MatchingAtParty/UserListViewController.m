@@ -92,21 +92,55 @@
 }
 
 - (void)onTappedUserIcon:(UITapGestureRecognizer *)recognizer {
-	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImageView *iv = (UIImageView*)recognizer.view;
-        ((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserIconNum = (int)iv.superview.tag;
+    
+    UIImageView *iv = (UIImageView*)recognizer.view;
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserIconNum = (int)iv.superview.tag;
         
-		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-        imagePicker.delegate = self;
-        imagePicker.allowsEditing = YES;
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:imagePicker animated:YES completion:nil];
-        
-    } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"カメラロールにアクセスできません" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-        return;
-	}
+    UIActionSheet *as = [[UIActionSheet alloc] init];
+    as.delegate = self;
+    [as addButtonWithTitle:@"カメラ起動"];
+    [as addButtonWithTitle:@"カメラロールから選択"];
+    [as addButtonWithTitle:@"キャンセル"];
+    as.cancelButtonIndex = 2;
+    [as showInView:self.view];
+    
+}
+
+-(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (buttonIndex) {
+        case 0:
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                imagePicker.delegate = self;
+                imagePicker.allowsEditing = YES;
+                imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                [self presentViewController:imagePicker animated:YES completion:nil];
+                
+            } else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"カメラを起動できません" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                return;
+            }
+            break;
+        case 1:
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                imagePicker.delegate = self;
+                imagePicker.allowsEditing = YES;
+                imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                [self presentViewController:imagePicker animated:YES completion:nil];
+                
+            } else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"カメラロールにアクセスできません" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                return;
+            }
+            break;
+    }
+    
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -118,16 +152,54 @@
 	
 	if(editedImage) {
 		saveImage = editedImage;
-	} else {
+	}else {
 		saveImage = originalImage;
 	}
-	
-    UIView *view = (UIView*)[self.view viewWithTag:((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserIconNum];
-    UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
-    iv.image = saveImage;
+    
+    if(picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        imageView.image = saveImage;
+        
+        UIImageWriteToSavedPhotosAlbum(originalImage, self,
+                                       @selector(savedOriginalImage:didFinishSavingWithError:contextInfo:),
+                                       NULL);
+        UIImageWriteToSavedPhotosAlbum(saveImage, self,
+                                       @selector(savedEditedImage:didFinishSavingWithError:contextInfo:),
+                                       NULL);
+        
+	}else {
+        
+		UIView *view = (UIView*)[self.view viewWithTag:((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserIconNum];
+        UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
+        iv.image = saveImage;
+        
+	}
+	
     [self dismissViewControllerAnimated:YES completion:nil];
     
+}
+
+-(void)savedOriginalImage:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void*)context{
+    
+    if(error){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"撮影画像の保存に失敗しました" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+}
+
+-(void)savedEditedImage:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void*)context{
+    
+    if(error){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"編集画像の保存に失敗しました" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)tappedPlusMaleUserButton {
@@ -192,7 +264,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
+//    [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 

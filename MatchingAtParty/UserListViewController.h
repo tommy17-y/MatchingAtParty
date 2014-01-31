@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UserListView.h"
 
-@interface UserListViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
+@interface UserListViewController : UIViewController<UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate> {
     int maleUserNum;
     int femaleUserNum;
     int userID;
