@@ -32,6 +32,7 @@
     maleUserNum = 1;
     femaleUserNum = 1;
     userID = 2;
+    _imagePicker = [[UIImagePickerController alloc] init];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -112,11 +113,10 @@
         case 0:
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                 
-                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-                imagePicker.delegate = self;
-                imagePicker.allowsEditing = YES;
-                imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                [self presentViewController:imagePicker animated:YES completion:nil];
+                _imagePicker.delegate = self;
+                _imagePicker.allowsEditing = YES;
+                _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                [self presentViewController:_imagePicker animated:YES completion:nil];
                 
             } else {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"カメラを起動できません" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -127,11 +127,10 @@
         case 1:
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
                 
-                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-                imagePicker.delegate = self;
-                imagePicker.allowsEditing = YES;
-                imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                [self presentViewController:imagePicker animated:YES completion:nil];
+                _imagePicker.delegate = self;
+                _imagePicker.allowsEditing = YES;
+                _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                [self presentViewController:_imagePicker animated:YES completion:nil];
                 
             } else {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"カメラロールにアクセスできません" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -160,7 +159,7 @@
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         imageView.image = saveImage;
-        
+       
         UIImageWriteToSavedPhotosAlbum(originalImage, self,
                                        @selector(savedOriginalImage:didFinishSavingWithError:contextInfo:),
                                        NULL);
@@ -241,20 +240,32 @@
 - (void)tappedDeleteUserButton:(UIButton*)button {
     UIView *view = (UIView*)[self.view viewWithTag:button.superview.tag];
     
-    // 下にあるビューを上に移動
-    if(1) {
-        
-    }
-    
-    if(view.frame.origin.x < [[UIScreen mainScreen] bounds].size.width / 2) {
+    if(view.center.x < _scrollView.frame.size.width / 2) {
         maleUserNum--;
-        if(maleUserNum > femaleUserNum) {
+        for(int i = 0; i < _scrollView.subviews.count; i++) {
+            UIView* subview = [_scrollView.subviews objectAtIndex:i];
+            if((subview.center.y > view.center.y) && (subview.center.x < _scrollView.frame.size.width / 2)){
+                subview.frame = CGRectMake(subview.frame.origin.x,
+                                           subview.frame.origin.y - view.frame.size.height,
+                                           subview.frame.size.width,
+                                           subview.frame.size.height);
+            }
+        }
+        if(maleUserNum >= femaleUserNum) {
             _scrollView.contentSize = CGSizeMake(view.frame.size.width, _scrollView.contentSize.height - view.frame.size.height);
         }
-
-    }else {
+    } else {
         femaleUserNum--;
-        if(maleUserNum < femaleUserNum) {
+        for(int i = 0; i < _scrollView.subviews.count; i++) {
+            UIView* subview = [_scrollView.subviews objectAtIndex:i];
+            if((subview.center.y > view.center.y) && (subview.center.x > _scrollView.frame.size.width / 2)){
+                subview.frame = CGRectMake(subview.frame.origin.x,
+                                           subview.frame.origin.y - view.frame.size.height,
+                                           subview.frame.size.width,
+                                           subview.frame.size.height);
+            }
+        }
+        if(maleUserNum <= femaleUserNum) {
             _scrollView.contentSize = CGSizeMake(view.frame.size.width, _scrollView.contentSize.height - view.frame.size.height);
         }
     }
@@ -264,7 +275,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-//    [super didReceiveMemoryWarning];
+    [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 

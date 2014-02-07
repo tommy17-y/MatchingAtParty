@@ -17,5 +17,6 @@
 
 @property (nonatomic, retain) UserListView *userListView;
 @property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, retain) UIImagePickerController *imagePicker;
 
 @end
