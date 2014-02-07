@@ -61,7 +61,7 @@
     _scrollView.frame = CGRectMake(0,
                                    _userListView.plusMaleUserButton.frame.origin.y + _userListView.plusMaleUserButton.frame.size.height + /*ボタンとスクロールのマージン*/10,
                                    rect.size.width,
-                                   rect.size.height - _userListView.plusMaleUserButton.frame.origin.y + _userListView.plusMaleUserButton.frame.size.height);
+                                   rect.size.height - (_userListView.plusMaleUserButton.frame.origin.y + _userListView.plusMaleUserButton.frame.size.height + /*ボタンとスクロールのマージン*/10));
     
     [_userListView layoutUserView:0 UserId:1 columnNum:maleUserNum];
     UIView *view = (UIView*)[_userListView viewWithTag:1];
@@ -69,6 +69,7 @@
     UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
     UIButton *btn = (UIButton*)[view.subviews objectAtIndex:3];
     tf.delegate = self;
+    [self registerForKeyboardNotifications];
     [iv addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTappedUserIcon:)]];
     [btn addTarget:self action:@selector(tappedDeleteUserButton:) forControlEvents:UIControlEventTouchDown];
     [_scrollView addSubview:view];
@@ -83,7 +84,7 @@
     [btn addTarget:self action:@selector(tappedDeleteUserButton:) forControlEvents:UIControlEventTouchDown];
     [_scrollView addSubview:view];
     
-    _scrollView.contentSize = CGSizeMake(rect.size.width, view.frame.size.height + _userListView.plusMaleUserButton.frame.size.height + [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + /*ボタンとスクロールのマージン*/10 + /*ボタンと画面上部のマージン*/10);
+    _scrollView.contentSize = CGSizeMake(rect.size.width, view.frame.size.height);
     
  }
 
@@ -92,10 +93,43 @@
     return YES;
 }
 
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)keyboardWasShown:(NSNotification*)notification {
+    
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardHeight = keyboardRect.size.height;
+    
+    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    [UIView animateWithDuration:duration delay:0.0  options:(animationCurve << 16)
+                     animations:^{_scrollView.contentSize = CGSizeMake(_scrollView.contentSize.width,
+                                                                       _scrollView.contentSize.height + keyboardHeight);} completion:nil];
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+    [UIView animateWithDuration:duration delay:0.0  options:(animationCurve << 16)
+                     animations:^{_scrollView.contentSize = CGSizeMake(_scrollView.contentSize.width,
+                                                                       _scrollView.contentSize.height - keyboardHeight);} completion:nil];
+}
+
 - (void)onTappedUserIcon:(UITapGestureRecognizer *)recognizer {
     
     UIImageView *iv = (UIImageView*)recognizer.view;
-    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserIconNum = (int)iv.superview.tag;
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserNum = (int)iv.superview.tag;
         
     UIActionSheet *as = [[UIActionSheet alloc] init];
     as.delegate = self;
@@ -169,7 +203,7 @@
         
 	}else {
         
-		UIView *view = (UIView*)[self.view viewWithTag:((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserIconNum];
+		UIView *view = (UIView*)[self.view viewWithTag:((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserNum];
         UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
         iv.image = saveImage;
         
@@ -215,7 +249,7 @@
     [_scrollView addSubview:view];
     
     if(maleUserNum > femaleUserNum) {
-        _scrollView.contentSize = CGSizeMake(view.frame.size.width, _scrollView.contentSize.height + view.frame.size.height);
+        _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _scrollView.contentSize.height + view.frame.size.height);
     }
 }
 
@@ -233,7 +267,7 @@
     [_scrollView addSubview:view];
     
     if(maleUserNum < femaleUserNum) {
-        _scrollView.contentSize = CGSizeMake(view.frame.size.width, _scrollView.contentSize.height + view.frame.size.height);
+        _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _scrollView.contentSize.height + view.frame.size.height);
     }
 }
 
@@ -252,7 +286,7 @@
             }
         }
         if(maleUserNum >= femaleUserNum) {
-            _scrollView.contentSize = CGSizeMake(view.frame.size.width, _scrollView.contentSize.height - view.frame.size.height);
+            _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _scrollView.contentSize.height - view.frame.size.height);
         }
     } else {
         femaleUserNum--;
@@ -266,11 +300,21 @@
             }
         }
         if(maleUserNum <= femaleUserNum) {
-            _scrollView.contentSize = CGSizeMake(view.frame.size.width, _scrollView.contentSize.height - view.frame.size.height);
+            _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _scrollView.contentSize.height - view.frame.size.height);
         }
     }
     
     [view removeFromSuperview];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    // キーボード表示・非表示の通知の解除
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning

@@ -12,6 +12,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property int tappedUserIconNum;
+@property int tappedUserNum;
 
 @end

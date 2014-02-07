@@ -13,6 +13,7 @@
     int maleUserNum;
     int femaleUserNum;
     int userID;
+    float keyboardHeight;
 }
 
 @property (nonatomic, retain) UserListView *userListView;
