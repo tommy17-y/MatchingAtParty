@@ -14,7 +14,7 @@ const int buttonRate = 10;
 
 - (UIButton*)plusMaleUserButton {
     if(!_plusMaleUserButton) {
-        _plusMaleUserButton = [[UIButton alloc] initWithFrame:CGRectMake((width - (width / buttonRate * 2)) / 4,
+        _plusMaleUserButton = [[UIButton alloc] initWithFrame:CGRectMake((width - (width / buttonRate * 2)) / 8,
                                                                          [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + 10,
                                                                          width / buttonRate,
                                                                          width / buttonRate)];
@@ -29,7 +29,7 @@ const int buttonRate = 10;
 
 - (UIButton*)plusFemaleUserButton {
     if(!_plusFemaleUserButton) {
-        _plusFemaleUserButton = [[UIButton alloc] initWithFrame:CGRectMake((width - (width / buttonRate * 2)) / 4 * 3 + width / buttonRate,
+        _plusFemaleUserButton = [[UIButton alloc] initWithFrame:CGRectMake((width - (width / buttonRate * 2)) / 8 * 7 + width / buttonRate,
                                                                            [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + 10,
                                                                            width / buttonRate,
                                                                            width / buttonRate)];
@@ -40,6 +40,21 @@ const int buttonRate = 10;
         [self addSubview:_plusFemaleUserButton];
     }
     return _plusFemaleUserButton;
+}
+
+- (UIButton*)startMatchingButton {
+    if(!_startMatchingButton) {
+        _startMatchingButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
+                                                                          [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + 10,
+                                                                          width / buttonRate * 3,
+                                                                          width / buttonRate)];
+        _startMatchingButton.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2,
+                                                  _startMatchingButton.center.y);
+        [_startMatchingButton setTitle:@"start" forState:UIControlStateNormal];
+        _startMatchingButton.backgroundColor = [UIColor redColor];
+        [self addSubview:_startMatchingButton];
+    }
+    return _startMatchingButton;
 }
 
 - (UIView*) userView {
