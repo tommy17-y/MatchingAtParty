@@ -15,9 +15,11 @@
 
 @property (nonatomic,retain) UIButton *plusMaleUserButton;
 @property (nonatomic,retain) UIButton *plusFemaleUserButton;
+@property (nonatomic,retain) UIButton *startMatchingButton;
 
 - (UIButton*)plusMaleUserButton;
 - (UIButton*)plusFemaleUserButton;
+- (UIButton*)startMatchingButton;
 
 - (void)layoutUserView:(int)gender UserId:(int)userId columnNum:(int)columnNum;
 @end

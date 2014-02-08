@@ -29,6 +29,8 @@
 		B6A75C1618957CF1002B5C20 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B6A75C1418957CF1002B5C20 /* InfoPlist.strings */; };
 		B6A75C1818957CF1002B5C20 /* MatchingAtPartyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A75C1718957CF1002B5C20 /* MatchingAtPartyTests.m */; };
 		B6A75C231895814B002B5C20 /* MatchingAtPartyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A75C221895814B002B5C20 /* MatchingAtPartyView.m */; };
+		B6DC987D18A66013007D4B36 /* ChooseAndResultView.m in Sources */ = {isa = PBXBuildFile; fileRef = B6DC987C18A66013007D4B36 /* ChooseAndResultView.m */; };
+		B6DC988018A66021007D4B36 /* ChooseAndResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6DC987F18A66021007D4B36 /* ChooseAndResultViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +74,10 @@
 		B6A75C1718957CF1002B5C20 /* MatchingAtPartyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatchingAtPartyTests.m; sourceTree = "<group>"; };
 		B6A75C211895814B002B5C20 /* MatchingAtPartyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchingAtPartyView.h; sourceTree = "<group>"; };
 		B6A75C221895814B002B5C20 /* MatchingAtPartyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchingAtPartyView.m; sourceTree = "<group>"; };
+		B6DC987B18A66013007D4B36 /* ChooseAndResultView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseAndResultView.h; sourceTree = "<group>"; };
+		B6DC987C18A66013007D4B36 /* ChooseAndResultView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseAndResultView.m; sourceTree = "<group>"; };
+		B6DC987E18A66021007D4B36 /* ChooseAndResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseAndResultViewController.h; sourceTree = "<group>"; };
+		B6DC987F18A66021007D4B36 /* ChooseAndResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseAndResultViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +196,8 @@
 				B6A75C221895814B002B5C20 /* MatchingAtPartyView.m */,
 				B6020EFA1899356F008127AB /* UserListView.h */,
 				B6020EFB1899356F008127AB /* UserListView.m */,
+				B6DC987B18A66013007D4B36 /* ChooseAndResultView.h */,
+				B6DC987C18A66013007D4B36 /* ChooseAndResultView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -201,6 +209,8 @@
 				B6A75C0218957CF1002B5C20 /* MatchingAtPartyViewController.m */,
 				B6020EFD18993587008127AB /* UserListViewController.h */,
 				B6020EFE18993587008127AB /* UserListViewController.m */,
+				B6DC987E18A66021007D4B36 /* ChooseAndResultViewController.h */,
+				B6DC987F18A66021007D4B36 /* ChooseAndResultViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -316,9 +326,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6DC987D18A66013007D4B36 /* ChooseAndResultView.m in Sources */,
 				B6020EFC1899356F008127AB /* UserListView.m in Sources */,
 				B6A75C0318957CF1002B5C20 /* MatchingAtPartyViewController.m in Sources */,
 				B6A75BFD18957CF1002B5C20 /* AppDelegate.m in Sources */,
+				B6DC988018A66021007D4B36 /* ChooseAndResultViewController.m in Sources */,
 				B6A75BF918957CF1002B5C20 /* main.m in Sources */,
 				B6A75C231895814B002B5C20 /* MatchingAtPartyView.m in Sources */,
 				B6020EFF18993587008127AB /* UserListViewController.m in Sources */,

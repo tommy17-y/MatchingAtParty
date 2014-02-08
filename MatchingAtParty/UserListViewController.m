@@ -8,6 +8,7 @@
 
 #import "UserListViewController.h"
 #import "AppDelegate.h"
+#import "ChooseAndResultViewController.h"
 
 @interface UserListViewController ()
 
@@ -55,8 +56,13 @@
     [_userListView.plusFemaleUserButton addTarget:self action:@selector(tappedPlusFemaleUserButton) forControlEvents:UIControlEventTouchUpInside];
     _userListView.plusFemaleUserButton.exclusiveTouch = YES;
     
+    [_userListView startMatchingButton];
+    [_userListView.startMatchingButton addTarget:self action:@selector(tappedstartMatchingButton) forControlEvents:UIControlEventTouchUpInside];
+    _userListView.startMatchingButton.exclusiveTouch = YES;
+
     [self.view addSubview:_userListView.plusMaleUserButton];
     [self.view addSubview:_userListView.plusFemaleUserButton];
+    [self.view addSubview:_userListView.startMatchingButton];
     
     _scrollView.frame = CGRectMake(0,
                                    _userListView.plusMaleUserButton.frame.origin.y + _userListView.plusMaleUserButton.frame.size.height + /*ボタンとスクロールのマージン*/10,
@@ -305,6 +311,38 @@
     }
     
     [view removeFromSuperview];
+}
+
+- (void)tappedstartMatchingButton {
+    
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser = [NSMutableArray array];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser = [NSMutableArray array];
+    
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser removeAllObjects];
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser removeAllObjects];
+    
+    
+    for(int i = 0; i < _scrollView.subviews.count; i++) {
+
+        UIView* view = [_scrollView.subviews objectAtIndex:i];
+
+        if(view.tag != NULL){
+            UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
+            UITextField *tf = (UITextField*)[view.subviews objectAtIndex:2];
+
+            if(view.center.x < _scrollView.frame.size.width / 2){
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser addObject:iv.image];
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser addObject:tf.text];
+            } else {
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser addObject:iv.image];
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser addObject:tf.text];
+            }
+        }
+    }
+    
+    ChooseAndResultViewController *chooseAndResultViewController = [[ChooseAndResultViewController alloc] init];
+    [self presentViewController:chooseAndResultViewController animated:YES completion:nil];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
