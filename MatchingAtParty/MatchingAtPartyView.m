@@ -9,8 +9,6 @@
 #import "MatchingAtPartyView.h"
 
 @implementation MatchingAtPartyView
-@synthesize startButton = _startButton;
-@synthesize cameraButton = _cameraButton;
 
 - (UIButton*)startButton {
     if(!_startButton) {
