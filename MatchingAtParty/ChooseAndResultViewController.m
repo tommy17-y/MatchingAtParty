@@ -189,8 +189,15 @@
     
     if(selectingUserGender == 0){
         
+        if(selectedUserId == 0) {
+            selectingUserId--;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"相手を選択してください" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        
         [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser
-         addObject:[NSNumber numberWithInteger:selectedUserId]];
+         addObject:[NSNumber numberWithInteger:selectedUserId - 1000]];
         
         if(selectingUserId > (int)[((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser count] / 2) {
             for (UIView *view in [_scrollView subviews]) {
@@ -208,7 +215,6 @@
             
             for (UIView *view in [_scrollView subviews]) {
                 [[view layer] setBorderColor:[[[UIColor whiteColor] colorWithAlphaComponent:0.8] CGColor]];
-
             }
             selectedUserId = 0;
         }
@@ -216,6 +222,8 @@
         
         if(selectedUserId == 0) {
             selectingUserId--;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"相手を選択してください" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
             return;
         }
 
@@ -227,7 +235,8 @@
                 [view removeFromSuperview];
             }
             
-            [self displayResult];
+            [self displayResultViewAndMakeResult];
+            
         } else {
             UIView *selectingUserView = (UIView*)[self.view viewWithTag:10000];
             UILabel *selectingUserViewLabel = (UILabel*)[selectingUserView.subviews objectAtIndex:2];
@@ -238,20 +247,194 @@
             
             for (UIView *view in [_scrollView subviews]) {
                 [[view layer] setBorderColor:[[[UIColor whiteColor] colorWithAlphaComponent:0.8] CGColor]];
-                
             }
             selectedUserId = 0;
         }
     }
 }
 
-- (void)displayResult {
+- (void)displayResultViewAndMakeResult {
     UIButton *decideButton = (UIButton*)[self.view viewWithTag:50000];
     decideButton.hidden = YES;
 
     UILabel *text = (UILabel*)[self.view viewWithTag:50001];
     text.hidden = YES;
     
+    // matching
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0,
+                                                               [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height,
+                                                               [[UIScreen mainScreen] applicationFrame].size.width,
+                                                               [[UIScreen mainScreen] applicationFrame].size.height)];
+    backView.backgroundColor = [UIColor whiteColor];
+
+    UIView *resultView = [[UIView alloc]initWithFrame:CGRectMake(30,
+                                                                 [[UIScreen mainScreen] bounds].size.height - [[UIScreen mainScreen] applicationFrame].size.height + 30,
+                                                                 [[UIScreen mainScreen] bounds].size.width - 30 * 2,
+                                                                 [[UIScreen mainScreen] applicationFrame].size.height - 30 * 2)];
+    resultView.backgroundColor = [UIColor whiteColor];
+    resultView.layer.cornerRadius = 10.0f;
+    resultView.clipsToBounds = YES;
+    [[resultView layer] setBorderColor:[[[UIColor blackColor] colorWithAlphaComponent:1.0f] CGColor]];
+    [[resultView layer] setBorderWidth:2.0f];
+    resultView.tag = 70000;
+    
+    [UIView animateWithDuration:1.5f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         [self.view addSubview:backView];
+                         backView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6f];
+                     } completion:^(BOOL finished) {
+                         [self.view addSubview:resultView];
+                     }];
+    
+    couple = [NSMutableArray array];
+    if([((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser count] >= [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser count]) {
+        
+        for(int i = 0; i < [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser count]; i++) {
+            int index = [[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser objectAtIndex:i] intValue];
+            if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:index - 1] intValue] == i + 1) {
+                [couple addObject:[NSNumber numberWithInt:((i + 1) * 10 + index)]];
+            }
+        }
+    } else {
+        for(int i = 0; i < [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser count]; i++) {
+            int index = [[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:i] intValue];
+            if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser objectAtIndex:index - 1] intValue] == i + 1) {
+                [couple addObject:[NSNumber numberWithInt:(index * 10 + (i + 1))]];
+            }
+        }
+    }
+    
+    UILabel *resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+                                                                     resultView.frame.size.height / 3,
+                                                                     resultView.frame.size.width,
+                                                                     30)];
+    resultLabel.textAlignment = NSTextAlignmentCenter;
+    [resultView addSubview:resultLabel];
+    
+    UIButton *resultButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
+                                                                        resultView.frame.size.height / 3 * 2 - 30,
+                                                                        resultView.frame.size.width / 2,
+                                                                        30)];
+    resultButton.center = CGPointMake(resultView.frame.size.width / 2,
+                                      resultButton.center.y);
+    resultButton.backgroundColor = [UIColor blackColor];
+    [resultView addSubview:resultButton];
+    resultButton.exclusiveTouch = YES;
+    
+    if ((int)[couple count] != 0) {
+        resultLabel.text = [NSString stringWithFormat:@"%d件のマッチングがありました！", (int)[couple count]];
+        [resultButton setTitle:@"結果を見る" forState:UIControlStateNormal];
+        [resultButton addTarget:self action:@selector(tappedResultButton) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        resultLabel.text = [NSString stringWithFormat:@"マッチングはありませんでした…"];
+        [resultButton setTitle:@"もう一度" forState:UIControlStateNormal];
+        [resultButton addTarget:self action:@selector(tappedBackButton) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)tappedResultButton {
+    UIView *resultView = (UIView*)[self.view viewWithTag:70000];
+    for (UIView *view in [resultView subviews]) {
+        [view removeFromSuperview];
+    }
+    
+    [self displayResult];
+}
+
+- (void)displayResult {
+    displayingCoupleId = 0;
+
+    UIView *resultView = (UIView*)[self.view viewWithTag:70000];
+    
+    int maleUserNum = (int)[[couple objectAtIndex:displayingCoupleId] intValue] / 10;
+    int femaleUserNum = (int)[[couple objectAtIndex:displayingCoupleId] intValue] % 10;
+    
+    [_chooseAndResultView layoutUserView:0 UserId:2000];
+    
+    UIView *maleUserView = (UIView*)[_chooseAndResultView viewWithTag:2000];
+    
+    UILabel *maleUserViewLabel = (UILabel*)[maleUserView.subviews objectAtIndex:2];
+    maleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(maleUserNum - 1) * 2 + 1];
+    
+    UIImageView *maleUserViewImageView = (UIImageView*)[maleUserView.subviews objectAtIndex:0];
+    maleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(maleUserNum - 1) * 2];
+
+    [_chooseAndResultView layoutUserView:1 UserId:1001];
+    
+    UIView *femaleUserView = (UIView*)[_chooseAndResultView viewWithTag:2001];
+    
+    UILabel *femaleUserViewLabel = (UILabel*)[femaleUserView.subviews objectAtIndex:2];
+    femaleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(femaleUserNum - 1) * 2 + 1];
+    
+    UIImageView *femaleUserViewImageView = (UIImageView*)[femaleUserView.subviews objectAtIndex:0];
+    femaleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(femaleUserNum - 1) * 2];
+    
+    maleUserView.frame = CGRectMake((resultView.frame.size.width - maleUserView.frame.size.width) / 2,
+                                    30,
+                                    maleUserView.frame.size.width,
+                                    maleUserView.frame.size.height);
+    femaleUserView.frame = CGRectMake((resultView.frame.size.width - femaleUserView.frame.size.width) / 2,
+                                      maleUserView.frame.origin.y + maleUserView.frame.size.height + 30,
+                                      femaleUserView.frame.size.width,
+                                      femaleUserView.frame.size.height);
+    [resultView addSubview:maleUserView];
+    [resultView addSubview:femaleUserView];
+    
+    UIButton *resultButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
+                                                                        resultView.frame.size.height - 60,
+                                                                        resultView.frame.size.width / 2,
+                                                                        30)];
+    resultButton.center = CGPointMake(resultView.frame.size.width / 2,
+                                      resultButton.center.y);
+    resultButton.backgroundColor = [UIColor blackColor];
+    [resultView addSubview:resultButton];
+    resultButton.exclusiveTouch = YES;
+    [resultButton addTarget:self action:@selector(tappednextResultButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (displayingCoupleId + 1 < (int)[couple count]) {
+        [resultButton setTitle:@"次の結果を見る" forState:UIControlStateNormal];
+    } else {
+        [resultButton setTitle:@"もう一度" forState:UIControlStateNormal];
+    }
+
+}
+
+- (void)tappednextResultButton:(UIButton*)button {
+    if (displayingCoupleId + 1 < (int)[couple count]) {
+        displayingCoupleId++;
+        
+        int maleUserNum = (int)[[couple objectAtIndex:displayingCoupleId] intValue] / 10;
+        int femaleUserNum = (int)[[couple objectAtIndex:displayingCoupleId] intValue] % 10;
+        
+        UIView *maleUserView = (UIView*)[_chooseAndResultView viewWithTag:2000];
+        
+        UILabel *maleUserViewLabel = (UILabel*)[maleUserView.subviews objectAtIndex:2];
+        maleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(maleUserNum - 1) * 2 + 1];
+        
+        UIImageView *maleUserViewImageView = (UIImageView*)[maleUserView.subviews objectAtIndex:0];
+        maleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(maleUserNum - 1) * 2];
+        
+        [_chooseAndResultView layoutUserView:1 UserId:1001];
+        
+        UIView *femaleUserView = (UIView*)[_chooseAndResultView viewWithTag:2001];
+        
+        UILabel *femaleUserViewLabel = (UILabel*)[femaleUserView.subviews objectAtIndex:2];
+        femaleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(femaleUserNum - 1) * 2 + 1];
+        
+        UIImageView *femaleUserViewImageView = (UIImageView*)[femaleUserView.subviews objectAtIndex:0];
+        femaleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(femaleUserNum - 1) * 2];
+        
+        if (displayingCoupleId + 1 >= (int)[couple count]) {
+            [button setTitle:@"もう一度" forState:UIControlStateNormal];
+        }
+        
+    } else {
+        [self dismissViewControllerAnimated:YES completion: nil];
+    }
+    
+
 }
 
 - (void)tappedBackButton {
