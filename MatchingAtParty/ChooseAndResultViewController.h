@@ -11,6 +11,9 @@
 
 @interface ChooseAndResultViewController : UIViewController{
     CGRect rect;
+    int selectingUserId;
+    int selectingUserGender;
+    int selectedUserId;
 }
 
 @property (nonatomic, retain) UIScrollView *scrollView;

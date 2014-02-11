@@ -15,5 +15,7 @@
 @property int tappedUserNum;
 @property NSMutableArray *maleUser;
 @property NSMutableArray *femaleUser;
+@property NSMutableArray *userIdmaleUserchoosingFemaleUser;
+@property NSMutableArray *userIdfemaleUserchoosingMaleUser;
 
 @end
