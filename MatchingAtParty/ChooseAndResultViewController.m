@@ -391,7 +391,7 @@
     resultButton.backgroundColor = [UIColor blackColor];
     [resultView addSubview:resultButton];
     resultButton.exclusiveTouch = YES;
-    [resultButton addTarget:self action:@selector(tappednextResultButton:) forControlEvents:UIControlEventTouchUpInside];
+    [resultButton addTarget:self action:@selector(tappedNextResultButton:) forControlEvents:UIControlEventTouchUpInside];
     
     if (displayingCoupleId + 1 < (int)[couple count]) {
         [resultButton setTitle:@"次の結果を見る" forState:UIControlStateNormal];
@@ -401,14 +401,16 @@
 
 }
 
-- (void)tappednextResultButton:(UIButton*)button {
+- (void)tappedNextResultButton:(UIButton*)button {
     if (displayingCoupleId + 1 < (int)[couple count]) {
         displayingCoupleId++;
         
         int maleUserNum = (int)[[couple objectAtIndex:displayingCoupleId] intValue] / 10;
         int femaleUserNum = (int)[[couple objectAtIndex:displayingCoupleId] intValue] % 10;
-        
-        UIView *maleUserView = (UIView*)[_chooseAndResultView viewWithTag:2000];
+
+        UIView *resultView = (UIView*)[self.view viewWithTag:70000];
+
+        UIView *maleUserView = (UIView*)[resultView viewWithTag:2000];
         
         UILabel *maleUserViewLabel = (UILabel*)[maleUserView.subviews objectAtIndex:2];
         maleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(maleUserNum - 1) * 2 + 1];
@@ -418,7 +420,7 @@
         
         [_chooseAndResultView layoutUserView:1 UserId:1001];
         
-        UIView *femaleUserView = (UIView*)[_chooseAndResultView viewWithTag:2001];
+        UIView *femaleUserView = (UIView*)[resultView viewWithTag:2001];
         
         UILabel *femaleUserViewLabel = (UILabel*)[femaleUserView.subviews objectAtIndex:2];
         femaleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(femaleUserNum - 1) * 2 + 1];
