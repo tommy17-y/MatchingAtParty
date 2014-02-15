@@ -206,6 +206,10 @@
         UIImageWriteToSavedPhotosAlbum(saveImage, self,
                                        @selector(savedEditedImage:didFinishSavingWithError:contextInfo:),
                                        NULL);
+
+		UIView *view = (UIView*)[self.view viewWithTag:((AppDelegate*)[[UIApplication sharedApplication] delegate]).tappedUserNum];
+        UIImageView *iv = (UIImageView*)[view.subviews objectAtIndex:0];
+        iv.image = saveImage;
         
 	}else {
         
