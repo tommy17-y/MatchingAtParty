@@ -349,9 +349,10 @@
     [resultView addSubview:resultLabel];
     
     UIButton *resultButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
-                                                                        resultView.frame.size.height / 3 * 2 - 30,
+                                                                        resultView.frame.size.height - 100,
                                                                         resultView.frame.size.width / 2,
                                                                         30)];
+
     resultButton.center = CGPointMake(resultView.frame.size.width / 2,
                                       resultButton.center.y);
     resultButton.backgroundColor = [UIColor blackColor];
@@ -366,6 +367,18 @@
         resultLabel.text = [NSString stringWithFormat:@"マッチングはありませんでした…"];
         [resultButton setTitle:@"もう一度" forState:UIControlStateNormal];
         [resultButton addTarget:self action:@selector(tappedBackButton) forControlEvents:UIControlEventTouchUpInside];
+        UIButton *magnifyButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
+                                                                             resultView.frame.size.height - 60,
+                                                                             resultView.frame.size.width / 2,
+                                                                             30)];
+        magnifyButton.center = CGPointMake(resultView.frame.size.width / 2,
+                                           magnifyButton.center.y);
+        magnifyButton.backgroundColor = [UIColor blackColor];
+        [magnifyButton setTitle:@"虫眼鏡" forState:UIControlStateNormal];
+        [resultView addSubview:magnifyButton];
+        magnifyButton.exclusiveTouch = YES;
+        [magnifyButton addTarget:self action:@selector(tappedMagnifyButton:) forControlEvents:UIControlEventTouchUpInside];
+
     }
 }
 
@@ -380,6 +393,7 @@
 
 - (void)displayResult {
     displayingCoupleId = 0;
+    displayingMagnifyId = 0;
 
     UIView *resultView = (UIView*)[self.view viewWithTag:70000];
     
@@ -418,7 +432,7 @@
     [resultView addSubview:femaleUserView];
     
     UIButton *resultButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
-                                                                        resultView.frame.size.height - 60,
+                                                                        resultView.frame.size.height - 100,
                                                                         resultView.frame.size.width / 2,
                                                                         30)];
     resultButton.center = CGPointMake(resultView.frame.size.width / 2,
@@ -428,12 +442,26 @@
     resultButton.exclusiveTouch = YES;
     [resultButton addTarget:self action:@selector(tappedNextResultButton:) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton *magnifyButton = [[UIButton alloc] initWithFrame:CGRectMake(0,
+                                                                         resultView.frame.size.height - 60,
+                                                                         resultView.frame.size.width / 2,
+                                                                         30)];
+    magnifyButton.center = CGPointMake(resultView.frame.size.width / 2,
+                                       magnifyButton.center.y);
+    magnifyButton.backgroundColor = [UIColor blackColor];
+    [magnifyButton setTitle:@"虫眼鏡" forState:UIControlStateNormal];
+    [resultView addSubview:magnifyButton];
+    magnifyButton.exclusiveTouch = YES;
+    [magnifyButton addTarget:self action:@selector(tappedMagnifyButton:) forControlEvents:UIControlEventTouchUpInside];
+    magnifyButton.hidden = YES;
+    magnifyButton.tag = 30000;
+
     if (displayingCoupleId + 1 < (int)[couple count]) {
         [resultButton setTitle:@"次の結果を見る" forState:UIControlStateNormal];
     } else {
         [resultButton setTitle:@"もう一度" forState:UIControlStateNormal];
+        magnifyButton.hidden = NO;
     }
-
 }
 
 - (void)tappedNextResultButton:(UIButton*)button {
@@ -453,8 +481,6 @@
         UIImageView *maleUserViewImageView = (UIImageView*)[maleUserView.subviews objectAtIndex:0];
         maleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(maleUserNum - 1) * 2];
         
-        [_chooseAndResultView layoutUserView:1 UserId:1001];
-        
         UIView *femaleUserView = (UIView*)[resultView viewWithTag:2001];
         
         UILabel *femaleUserViewLabel = (UILabel*)[femaleUserView.subviews objectAtIndex:2];
@@ -465,13 +491,72 @@
         
         if (displayingCoupleId + 1 >= (int)[couple count]) {
             [button setTitle:@"もう一度" forState:UIControlStateNormal];
+            UIButton *magnifyButton = (UIButton*)[resultView viewWithTag:30000];
+            magnifyButton.hidden = NO;
         }
         
     } else {
         [self dismissViewControllerAnimated:YES completion: nil];
     }
     
+}
 
+- (void)tappedMagnifyButton:(UIButton*)button {
+ 
+    UIView *resultView = (UIView*)[self.view viewWithTag:70000];
+    
+    if ((UIView*)[resultView viewWithTag:2000] == NULL) {
+        
+        [_chooseAndResultView layoutUserView:0 UserId:2000];
+        UIView *maleUserView = (UIView*)[_chooseAndResultView viewWithTag:2000];
+        
+        [_chooseAndResultView layoutUserView:1 UserId:1001];
+        UIView *femaleUserView = (UIView*)[_chooseAndResultView viewWithTag:2001];
+        
+        maleUserView.frame = CGRectMake((resultView.frame.size.width - maleUserView.frame.size.width) / 2,
+                                        30,
+                                        maleUserView.frame.size.width,
+                                        maleUserView.frame.size.height);
+        femaleUserView.frame = CGRectMake((resultView.frame.size.width - femaleUserView.frame.size.width) / 2,
+                                          maleUserView.frame.origin.y + maleUserView.frame.size.height + 30,
+                                          femaleUserView.frame.size.width,
+                                          femaleUserView.frame.size.height);
+        [resultView addSubview:maleUserView];
+        [resultView addSubview:femaleUserView];
+    }
+    
+    if (displayingMagnifyId + 1 <= [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser count]) {
+        displayingMagnifyId++;
+
+        UIView *maleUserView = (UIView*)[resultView viewWithTag:2000];
+        UIView *femaleUserView = (UIView*)[resultView viewWithTag:2001];
+        
+        if (displayingMagnifyId == 1) {
+            CGRect upperViewRect = maleUserView.frame;
+            CGRect lowerViewRect = femaleUserView.frame;
+            
+            maleUserView.frame = lowerViewRect;
+            femaleUserView.frame = upperViewRect;
+            
+            [button setTitle:@"NEXT" forState:UIControlStateNormal];
+        }
+        
+        UILabel *femaleUserViewLabel = (UILabel*)[femaleUserView.subviews objectAtIndex:2];
+        femaleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(displayingMagnifyId - 1) * 2 + 1];
+        UIImageView *femaleUserViewImageView = (UIImageView*)[femaleUserView.subviews objectAtIndex:0];
+        femaleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser objectAtIndex:(displayingMagnifyId - 1) * 2];
+        
+        int selectedUserIdfemaleUserchoosingMaleUser =[[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:(displayingMagnifyId - 1)] intValue];
+        
+        UILabel *maleUserViewLabel = (UILabel*)[maleUserView.subviews objectAtIndex:2];
+        maleUserViewLabel.text = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(selectedUserIdfemaleUserchoosingMaleUser - 1) * 2 + 1];
+        UIImageView *maleUserViewImageView = (UIImageView*)[maleUserView.subviews objectAtIndex:0];
+        maleUserViewImageView.image = [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser objectAtIndex:(selectedUserIdfemaleUserchoosingMaleUser - 1) * 2];
+        
+        if (displayingMagnifyId + 1 > [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser count]) {
+            button.hidden = YES;
+        }
+    }
 }
 
 - (void)tappedBackButton {

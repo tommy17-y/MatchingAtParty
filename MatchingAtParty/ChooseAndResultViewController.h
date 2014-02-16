@@ -16,6 +16,7 @@
     int selectedUserId;
     NSMutableArray *couple;
     int displayingCoupleId;
+    int displayingMagnifyId;
 }
 
 @property (nonatomic, retain) UIScrollView *scrollView;
