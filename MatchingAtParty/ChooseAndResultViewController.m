@@ -189,15 +189,18 @@
     
     if(selectingUserGender == 0){
         
-        if(selectedUserId == 0) {
-            selectingUserId--;
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"相手を選択してください" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            return;
-        }
+//        if(selectedUserId == 0) {
+//            selectingUserId--;
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー" message:@"相手を選択してください" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alert show];
+//            return;
+//        }
         
-        [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser
-         addObject:[NSNumber numberWithInteger:selectedUserId - 1000]];
+        if(selectedUserId == 0) {
+            [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser addObject:[NSNumber numberWithInteger:selectedUserId]];
+        } else {
+            [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser addObject:[NSNumber numberWithInteger:selectedUserId - 1000]];
+        }
         
         if(selectingUserId > (int)[((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser count] / 2) {
             for (UIView *view in [_scrollView subviews]) {
@@ -293,7 +296,24 @@
         
         for(int i = 0; i < [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser count]; i++) {
             int index = [[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser objectAtIndex:i] intValue];
-            if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:index - 1] intValue] == i + 1) {
+            if(index == 0) {
+                // どの女の子でもいいとき
+                for(int j = 0; j < [((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser count]; j++) {
+                    if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:j] intValue] == i + 1) {
+                        // もし自分を選んでくれている子がいたら
+                        if((int)([[couple lastObject] intValue] / 10) != i + 1){
+                            // 1人目
+                            [couple addObject:[NSNumber numberWithInt:((i + 1) * 10 + (j + 1))]];
+                        } else {
+                            // 2人目以降はランダム
+                            if(arc4random() % 2 == 0) {
+                                [couple removeLastObject];
+                                [couple addObject:[NSNumber numberWithInt:((i + 1) * 10 + (j + 1))]];
+                            }
+                        }
+                    }
+                }
+            } else if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:index - 1] intValue] == i + 1) {
                 [couple addObject:[NSNumber numberWithInt:((i + 1) * 10 + index)]];
             }
         }
@@ -302,6 +322,21 @@
             int index = [[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdfemaleUserchoosingMaleUser objectAtIndex:i] intValue];
             if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser objectAtIndex:index - 1] intValue] == i + 1) {
                 [couple addObject:[NSNumber numberWithInt:(index * 10 + (i + 1))]];
+            } else if([[((AppDelegate*)[[UIApplication sharedApplication] delegate]).userIdmaleUserchoosingFemaleUser objectAtIndex:index - 1] intValue] == 0) {
+                // 誰でもいいと言っている人を選んでいた場合
+                int flag = 0;
+                for(int j = 0; j < [couple count]; j++) {
+                    if((int)([[couple objectAtIndex:j] intValue] / 10) == index) {
+                        flag = 1;
+                        if(arc4random() % 2 == 0) {
+                            [couple removeObjectAtIndex:j];
+                            [couple addObject:[NSNumber numberWithInt:(index * 10 + (i + 1))]];
+                        }
+                    }
+                }
+                if(flag == 0) {
+                    [couple addObject:[NSNumber numberWithInt:(index * 10 + (i + 1))]];                    
+                }
             }
         }
     }
