@@ -13,8 +13,10 @@
 @property (strong, nonatomic) UIWindow *window;
 
 @property int tappedUserNum;
-@property NSMutableArray *maleUser;
-@property NSMutableArray *femaleUser;
+@property NSMutableArray *maleUserName;
+@property NSMutableArray *maleUserImage;
+@property NSMutableArray *femaleUserName;
+@property NSMutableArray *femaleUserImage;
 @property NSMutableArray *userIdmaleUserchoosingFemaleUser;
 @property NSMutableArray *userIdfemaleUserchoosingMaleUser;
 

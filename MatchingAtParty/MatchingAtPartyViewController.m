@@ -9,6 +9,7 @@
 #import "MatchingAtPartyViewController.h"
 #import "MatchingAtPartyView.h"
 #import "UserListViewController.h"
+#import "MagnifyViewController.h"
 
 @interface MatchingAtPartyViewController ()
 
@@ -33,8 +34,13 @@
     [matchingAtPartyView.cameraButton addTarget:self action:@selector(tappedCameraButton) forControlEvents:UIControlEventTouchUpInside];
     matchingAtPartyView.cameraButton.exclusiveTouch = YES;
 
+    [matchingAtPartyView magnifyButton];
+    [matchingAtPartyView.magnifyButton addTarget:self action:@selector(tappedmagnifyButton) forControlEvents:UIControlEventTouchUpInside];
+    matchingAtPartyView.magnifyButton.exclusiveTouch = YES;
+
     [self.view addSubview:matchingAtPartyView.startButton];
     [self.view addSubview:matchingAtPartyView.cameraButton];
+    [self.view addSubview:matchingAtPartyView.magnifyButton];
     
 }
 
@@ -59,6 +65,11 @@
         return;
 	}
 
+}
+
+- (void)tappedmagnifyButton {
+    MagnifyViewController *magnifyViewController = [[MagnifyViewController alloc] init];
+    [self presentViewController:magnifyViewController animated:YES completion:nil];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {

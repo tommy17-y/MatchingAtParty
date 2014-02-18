@@ -42,6 +42,21 @@
     return  _cameraButton;
 }
 
+- (UIButton*)magnifyButton{
+    if(!_magnifyButton) {
+        CGRect rect;
+        rect = [[UIScreen mainScreen] bounds];
+        _magnifyButton = [[UIButton alloc] initWithFrame:CGRectMake(20,
+                                                                   rect.size.height - [[UIScreen mainScreen] applicationFrame].size.height + 20,
+                                                                   35,
+                                                                   30)];
+        UIImage *img = [UIImage imageNamed:@"search.png"];
+        [_magnifyButton setBackgroundImage:img forState:UIControlStateNormal];
+        [self addSubview:_magnifyButton];
+    }
+    return  _magnifyButton;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

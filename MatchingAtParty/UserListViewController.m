@@ -319,11 +319,15 @@
 
 - (void)tappedstartMatchingButton {
     
-    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser = [NSMutableArray array];
-    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser = [NSMutableArray array];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUserName = [NSMutableArray array];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUserImage = [NSMutableArray array];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUserName = [NSMutableArray array];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUserImage = [NSMutableArray array];
     
-    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser removeAllObjects];
-    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser removeAllObjects];
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUserName removeAllObjects];
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUserImage removeAllObjects];
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUserName removeAllObjects];
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUserImage removeAllObjects];
     
     
     for(int i = 0; i < _scrollView.subviews.count; i++) {
@@ -335,11 +339,11 @@
             UITextField *tf = (UITextField*)[view.subviews objectAtIndex:2];
 
             if(view.center.x < _scrollView.frame.size.width / 2){
-                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser addObject:iv.image];
-                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUser addObject:tf.text];
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUserImage addObject:iv.image];
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).maleUserName addObject:tf.text];
             } else {
-                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser addObject:iv.image];
-                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUser addObject:tf.text];
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUserImage addObject:iv.image];
+                [((AppDelegate*)[[UIApplication sharedApplication] delegate]).femaleUserName addObject:tf.text];
             }
         }
     }

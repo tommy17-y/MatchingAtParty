@@ -12,8 +12,10 @@
 
 @property (nonatomic, retain) UIButton *startButton;
 @property (nonatomic, retain) UIButton *cameraButton;
+@property (nonatomic, retain) UIButton *magnifyButton;
 
 - (UIButton*)startButton;
 - (UIButton*)cameraButton;
+- (UIButton*)magnifyButton;
 
 @end
